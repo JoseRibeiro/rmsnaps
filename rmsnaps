@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Display help
+if [ "$1" = "-h" -o "$1" = "--help" ]; then
+	echo "Usage: rmsnaps"
+	echo "Remove disabled snaps"
+	exit 0
+fi
+
+# Must be executed with suid to be able to remove snaps.
+if [ $EUID -gt 0 ]; then
+	echo "Error: \$EUID $EUID run with sudo" >&2
+	exit 1
+fi
+
+# Inform the user that we don't accept any argument.
+if [ "$#" -ge 1 ]; then
+	echo "Ignoring arguments: $@"
+fi
+
+# List disabled snaps and remove them.
+snap list --all | grep disabled | awk  '{ print "snap remove --revision="$3" "$1 }' | bash
+
