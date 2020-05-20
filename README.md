@@ -1,0 +1,2 @@
+# rmsnaps
+Remove disabled snaps
